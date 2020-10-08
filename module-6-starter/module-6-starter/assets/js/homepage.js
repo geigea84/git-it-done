@@ -56,7 +56,7 @@ var formSubmitHandler = function(event) {
     else {
         alert("Please enter a GitHub username");
     }
-    console.log(event);
+    //console.log(event);
 };
 
 
@@ -71,8 +71,9 @@ var displayRepos = function(repos, searchTerm) {
         return;
     }
 
-    console.log(repos);
-    console.log(searchTerm);
+    //console.log(repos);
+    //console.log(searchTerm);
+    
     /*6.2.5 When working with an app that displays data based on user input, 
     we should always be sure to clear out the old content before 
     displaying new content.*/
@@ -81,16 +82,30 @@ var displayRepos = function(repos, searchTerm) {
     repoSearchTerm.textContent = searchTerm;
 
     //6.2.5 displaying repository data to the page
+    /*6.4.3 Find the displayRepos() function and target the for loop that's dynamically 
+    creating HTML elements from the GitHub API response. Change the expression that 
+    creates a <div> to create an <a> element instead. We'll also need to add an 
+    expression to create a new href attribute.*/
     //loop over repos
     for (var i = 0; i < repos.length; i++) {
         //format repo name------------------------------------------break this down
         var repoName = repos[i].owner.login + "/" + repos[i].name;
 
-        //create a container for each repo
-        var repoEl = document.createElement("div");
+        //create a link for each repo
+        var repoEl = document.createElement("a");
 
         //list classes for created div container
         repoEl.classList = "list-item flex-row justify-space-between align-center";
+
+        //set href for each anchor element
+        /*6.4.3 Notice that the path to the single-repo.html page in the newly created 
+        href attributes is a relative path from the index.html page, not homepage.js, 
+        where the element is created. From the browser's perspective, although 
+        dynamically created, these HTML elements become part of the markup—as 
+        shown in the page source of the rendered page. So when you create links to 
+        HTML pages in JavaScript, make sure the paths are relative to the HTML pages, 
+        not the JavaScript file.*/
+        repoEl.setAttribute("href", "./single-repo.html?repo=" + repoName);
 
         //create a span element to hold repository name 
         //(to go inside div with appendChild)
