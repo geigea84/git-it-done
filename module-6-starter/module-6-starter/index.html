@@ -21,13 +21,22 @@
 
   <main class="flex-row justify-space-between">
     <!--first column-->
-    <div class="col-12 col-md-4">
+    <div class="col-12 col-md-4 card">
       <h3 class="card-header text-uppercase">Search By User</h3>
       <form id="user-form" class="card-body">
         <label class="form-label" for="username">Username</label>
         <input name="username" id="username" type="text" autofocus="true" class="form-input" />
         <button type="submit" class="btn">Get User</button>
       </form>
+    </div>
+    <!--first column pt 2: language select buttons-->
+    <div class="card col-12 col-md-4">
+      <h3 class="card-header text-uppercase">Search By Topic</h3>
+      <div class="card-body" id="language-buttons">
+        <button class="btn" data-language="javascript">JavaScript</button>
+        <button class="btn" data-language="html">HTML</button>
+        <button class="btn" data-language="css">CSS</button>
+      </div>
     </div>
     <!--second column-->
     <div class="col-12 col-md-8">

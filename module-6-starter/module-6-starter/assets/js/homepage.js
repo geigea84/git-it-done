@@ -1,7 +1,8 @@
-var userFormEl      = document.querySelector("#user-form");
-var nameInputEl     = document.querySelector("#username");
-var repoContainerEl = document.querySelector("#repos-container");
-var repoSearchTerm  = document.querySelector("#repo-search-term");
+var userFormEl        = document.querySelector("#user-form");
+var nameInputEl       = document.querySelector("#username");
+var repoContainerEl   = document.querySelector("#repos-container");
+var repoSearchTerm    = document.querySelector("#repo-search-term");
+var languageButtonsEl = document.querySelector("#language-buttons");
 
 /*6.1.5 The then() method returns a Promise. It takes up to two arguments: 
 callback functions for the success and failure cases of the Promise.*/
@@ -126,7 +127,8 @@ var displayRepos = function(repos, searchTerm) {
         //(icons from Font Awesome)
         if (repos[i].open_issues_count > 0) {
             statusEl.innerHTML =
-            "<i class='fas fa-times status-icon icon-danger'></i>" + repos[i].open_issues_count + "issue(s)";
+            "<i class='fas fa-times status-icon icon-danger'></i>" 
+            + repos[i].open_issues_count + "issue(s)";
         }
         else {
             statusEl.innerHTML = "<i class='fas fa-check-square status-icon icon-success'></i>";
@@ -148,6 +150,46 @@ var displayRepos = function(repos, searchTerm) {
     }
 };
 
+//6.5.3 & 6.5.4
+var getFeaturedRepos = function(language) {
+    var apiUrl = "https://api.github.com/search/repositories?q=" 
+    + language + "+is:featured&sort=help-wanted-issues";
+
+    fetch(apiUrl).then(function(response) {
+        if (response.ok) {
+            response.json().then(function(data) {
+                displayRepos(data.items, language);
+            });
+        }
+        else {
+            alert("Error: " + response.statusText);
+        }
+    });
+};
+
+//6.5.6
+var buttonClickHandler = function(event) {
+    var language = event.target.getAttribute("data-language");
+    if (language) {
+        getFeaturedRepos(language);
+
+        /*6.5.6 Make sure to include repoContainerEl.textContent = "" 
+        to clear out any remaining text from the repo container. 
+        Even though this line comes after getFeaturedRepos(), it 
+        will always execute first, because getFeaturedRepos() is 
+        asynchronous and will take longer to get a response from 
+        GitHub's API.*/
+        //clear old content
+        repoContainerEl.textContent = "";
+    }
+};
+
 /*add event listener takes button type="submit", 
 and upon submit executes the function*/
 userFormEl.addEventListener("submit", formSubmitHandler);
+/*6.5.6 Why aren't we creating click listeners for each button? 
+Think back to the concept of event delegation. Imagine that we 
+had 15 language buttons instead of 3. That may add a lot of extra, 
+repeated code. To keep the code DRY, we can delegate click handling 
+on these elements to their parent elements.*/
+languageButtonsEl.addEventListener("click", buttonClickHandler);
